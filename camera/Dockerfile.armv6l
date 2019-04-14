@@ -1,4 +1,6 @@
-FROM debian
+# Sketchy AF
+#
+FROM arm32v5/debian
 
 RUN apt update
 RUN apt -y upgrade
