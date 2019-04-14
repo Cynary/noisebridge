@@ -1,5 +1,10 @@
 FROM chdkptp
 
 RUN apt -y install emacs-nox
+RUN apt -y install tmux
+RUN apt -y install file
+
+COPY tmux.conf /root/.tmux.conf
+RUN cp /root/.tmux.conf /etc/skel/
 
 CMD ["bash"]

@@ -1,19 +1,17 @@
-# Sketchy AF
-#
-FROM arm32v5/debian
+FROM raspbian/stretch
 
 RUN apt update
 RUN apt -y upgrade
 
 RUN apt install -y unzip \
-                   libusb-0.1-4 libreadline7 \
-                   libfreetype6 libpangocairo-1.0-0 libgtk-3-0 \
+                   libusb-0.1-4 libreadline6 \
+                   libfontconfig1 libpangocairo-1.0-0 libgtk-3-0 \
                    sudo gcc
 
-WORKDIR /scratch-chdkptp
-COPY chdkptp-r795-raspbian-gui.zip .
-COPY docker-entrypoint.sh .
-COPY create_user.c .
+WORKDIR /scratch/
+COPY chdkptp-r795-raspbian-gui.zip ./
+COPY docker-entrypoint.sh ./
+COPY create_user.c ./
 COPY sudoers_rule /etc/sudoers.d/
 
 # Setup entrypoint stuff - this makes sure a user as specified by -u always exists.
@@ -26,12 +24,7 @@ RUN chmod +x docker-entrypoint.sh && \
     unzip chdkptp-r795-raspbian-gui.zip && \
     chmod 0440 /etc/sudoers.d/sudoers_rule
 
-# Sketchy AF
-#
-RUN ln -s /lib/x86_64-linux-gnu/libreadline.so.7 /lib/x86_64-linux-gnu/libreadline.so.6 && \
-    ln -s /lib/x86_64-linux-gnu/libhistory.so.7 /lib/x86_64-linux-gnu/libhistory.so.6
+WORKDIR /scratch/chdkptp-r795/
 
-WORKDIR /scratch-chdkptp/chdkptp-r795
-
-ENTRYPOINT ["/scratch-chdkptp/docker-entrypoint.sh"]
+ENTRYPOINT ["/scratch/docker-entrypoint.sh"]
 CMD ["./chdkptp.sh"]
