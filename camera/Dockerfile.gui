@@ -1,3 +1,5 @@
 FROM chdkptp
 
+RUN apt -y install libfreetype6 libfontconfig1 libpangocairo-1.0-0 libgtk-3-0
+
 CMD ["./chdkptp_gui.sh"]

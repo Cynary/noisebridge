@@ -5,7 +5,6 @@ RUN apt -y upgrade
 
 RUN apt install -y unzip \
                    libusb-0.1-4 libreadline6 \
-                   libfontconfig1 libpangocairo-1.0-0 libgtk-3-0 \
                    sudo gcc
 
 WORKDIR /scratch/

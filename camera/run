@@ -38,10 +38,23 @@ then
     xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
 fi
 
+LSUSB_LINE=$(lsusb | grep Canon | head -n1)
+DEV=$(echo "$LSUSB_LINE" | sed -En 's:Bus ([0-9]+) Device ([0-9]+).*:/dev/bus/usb/\1/\2:p')
+
+if [ -z "$DEV" ]
+then
+    echo "Could not find camera."
+    exit 1
+fi
+
+echo "Forwarding $DEV to docker image, based on this from lsusb:"
+echo $LSUSB_LINE
+
 exec docker run -it --rm --privileged \
                 --volume=$XSOCK:$XSOCK:rw \
                 --volume=$XAUTH:$XAUTH:rw \
                 --env="XAUTHORITY=${XAUTH}" \
                 --env="DISPLAY" \
+                --device=$DEV \
             "chdkptp$EXTENSION" \
             $@
