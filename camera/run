@@ -7,10 +7,11 @@ cd $SCRIPT_PATH
 EXTENSION=""
 if [ -f ./Dockerfile.$1 ]
 then
-    EXTENSION=".$1"
+    IMAGE="$1"
+    EXTENSION=".$IMAGE"
 
     echo "Running image tagged chdkptp$EXTENSION"
-    echo "If you wished to run the $1 command in chdkptp, then run $0 -- $@ instead."
+    echo "If you wished to run the $IMAGE command in chdkptp, then run $0 -- $@ instead."
 
     shift
 fi
@@ -18,6 +19,12 @@ fi
 if [ "$1" = "--" ]
 then
     shift
+fi
+
+if [ -z "$(docker images -q "chdkptp$EXTENSION")" ]
+then
+    echo "Image chdkptp$EXTENSION does not exist. Run: make $IMAGE"
+    exit 1
 fi
 
 if ! [ -z "$DISPLAY" ]
@@ -36,5 +43,5 @@ exec docker run -it --rm --privileged \
                 --volume=$XAUTH:$XAUTH:rw \
                 --env="XAUTHORITY=${XAUTH}" \
                 --env="DISPLAY" \
-            chdkptp"$EXTENSION" \
+            "chdkptp$EXTENSION" \
             $@

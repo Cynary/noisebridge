@@ -1,0 +1,3 @@
+FROM chdkptp
+
+CMD ["./chdkptp_gui.sh"]
