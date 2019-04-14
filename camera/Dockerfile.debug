@@ -1,0 +1,5 @@
+FROM chdkptp
+
+RUN apt -y install emacs-nox
+
+CMD ["bash"]
