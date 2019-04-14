@@ -9,7 +9,7 @@ RUN apt install -y unzip \
                    sudo gcc
 
 WORKDIR /scratch
-COPY chdkptp-r785-Linux-x86_64.zip .
+COPY chdkptp-r795-Linux-x86_64.zip .
 COPY docker-entrypoint.sh .
 COPY create_user.c .
 COPY sudoers_rule /etc/sudoers.d/
@@ -21,7 +21,7 @@ RUN chmod +x docker-entrypoint.sh && \
     chown root:root create_user && \
     chmod +x ./create_user && \
     chmod u+s ./create_user && \
-    unzip chdkptp-r785-Linux-x86_64.zip && \
+    unzip chdkptp-r795-Linux-x86_64.zip && \
     chmod 0440 /etc/sudoers.d/sudoers_rule
 
 # Sketchy AF
@@ -29,7 +29,7 @@ RUN chmod +x docker-entrypoint.sh && \
 RUN ln -s /lib/x86_64-linux-gnu/libreadline.so.7 /lib/x86_64-linux-gnu/libreadline.so.6 && \
     ln -s /lib/x86_64-linux-gnu/libhistory.so.7 /lib/x86_64-linux-gnu/libhistory.so.6
 
-WORKDIR /scratch/chdkptp-r785
+WORKDIR /scratch/chdkptp-r795
 
 ENTRYPOINT ["/scratch/docker-entrypoint.sh"]
 CMD ["./chdkptp.sh"]
