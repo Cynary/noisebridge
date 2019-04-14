@@ -7,7 +7,7 @@ set -e
 if [ "$(id -u)" != "0" ]
 then
     NEW_USER=chdkuser
-    /scratch/create_user $(id -u) $NEW_USER
+    /scratch-chdkptp/create_user $(id -u) $NEW_USER
     sudo chown -R $NEW_USER:$NEW_USER $PWD
 fi
 

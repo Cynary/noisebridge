@@ -8,7 +8,7 @@ RUN apt install -y unzip \
                    libfreetype6 libpangocairo-1.0-0 libgtk-3-0 \
                    sudo gcc
 
-WORKDIR /scratch
+WORKDIR /scratch-chdkptp
 COPY chdkptp-r795-Linux-x86_64.zip .
 COPY docker-entrypoint.sh .
 COPY create_user.c .
@@ -29,7 +29,7 @@ RUN chmod +x docker-entrypoint.sh && \
 RUN ln -s /lib/x86_64-linux-gnu/libreadline.so.7 /lib/x86_64-linux-gnu/libreadline.so.6 && \
     ln -s /lib/x86_64-linux-gnu/libhistory.so.7 /lib/x86_64-linux-gnu/libhistory.so.6
 
-WORKDIR /scratch/chdkptp-r795
+WORKDIR /scratch-chdkptp/chdkptp-r795
 
-ENTRYPOINT ["/scratch/docker-entrypoint.sh"]
+ENTRYPOINT ["/scratch-chdkptp/docker-entrypoint.sh"]
 CMD ["./chdkptp.sh"]
