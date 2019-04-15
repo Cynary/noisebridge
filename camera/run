@@ -50,7 +50,7 @@ fi
 echo "Forwarding $DEV to docker image, based on this from lsusb:"
 echo $LSUSB_LINE
 
-exec docker run -it --rm --privileged \
+exec docker run -i --rm --privileged \
                 --volume=$XSOCK:$XSOCK:rw \
                 --volume=$XAUTH:$XAUTH:rw \
                 --env="XAUTHORITY=${XAUTH}" \
