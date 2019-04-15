@@ -27,6 +27,7 @@ then
     exit 1
 fi
 
+XOPTIONS=
 if ! [ -z "$DISPLAY" ]
 then
     # Lots of help from http://wiki.ros.org/docker/Tutorials/GUI
@@ -36,25 +37,33 @@ then
     touch $XAUTH
 
     xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+    XOPTIONS="$XOPTIONS --volume=$XSOCK:$XSOCK:rw"
+    XOPTIONS="$XOPTIONS --volume=$XAUTH:$XAUTH:rw"
+    XOPTIONS="$XOPTIONS --env=\"XAUTHORITY=${XAUTH}\""
+    XOPTIONS="$XOPTIONS --env=\"DISPLAY\""
 fi
 
+DEVOPTIONS=
 LSUSB_LINE=$(lsusb | grep Canon | head -n1)
 DEV=$(echo "$LSUSB_LINE" | sed -En 's:Bus ([0-9]+) Device ([0-9]+).*:/dev/bus/usb/\1/\2:p')
 
 if [ -z "$DEV" ]
 then
     echo "Could not find camera."
-    exit 1
+else
+    echo "Forwarding $DEV to docker image, based on this from lsusb:"
+    echo $LSUSB_LINE
+    DEVOPTIONS="--device=\"$DEV\""
 fi
 
-echo "Forwarding $DEV to docker image, based on this from lsusb:"
-echo $LSUSB_LINE
+TTY=
+if [[ -t 1 ]]
+then
+    TTY="-t"
+fi
 
-exec docker run -i --rm --privileged \
-                --volume=$XSOCK:$XSOCK:rw \
-                --volume=$XAUTH:$XAUTH:rw \
-                --env="XAUTHORITY=${XAUTH}" \
-                --env="DISPLAY" \
-                --device=$DEV \
+exec docker run $TTY -i --rm --privileged \
+                $XOPTIONS \
+                $DEVOPTIONS \
             "chdkptp$EXTENSION" \
             $@
