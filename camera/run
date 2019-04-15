@@ -39,8 +39,8 @@ then
     xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
     XOPTIONS="$XOPTIONS --volume=$XSOCK:$XSOCK:rw"
     XOPTIONS="$XOPTIONS --volume=$XAUTH:$XAUTH:rw"
-    XOPTIONS="$XOPTIONS --env=\"XAUTHORITY=${XAUTH}\""
-    XOPTIONS="$XOPTIONS --env=\"DISPLAY\""
+    XOPTIONS="$XOPTIONS --env=XAUTHORITY=${XAUTH}"
+    XOPTIONS="$XOPTIONS --env=DISPLAY"
 fi
 
 DEVOPTIONS=
@@ -62,7 +62,7 @@ then
     TTY="-t"
 fi
 
-exec docker run $TTY -i --rm --privileged \
+exec docker run $TTY -i --rm \
                 $XOPTIONS \
                 $DEVOPTIONS \
             "chdkptp$EXTENSION" \
