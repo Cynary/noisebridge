@@ -57,7 +57,7 @@ else
 fi
 
 TTY=
-if [[ -t 1 ]]
+if [ -t 1 ]
 then
     TTY="-t"
 fi
