@@ -1,0 +1,29 @@
+FROM raspbian/stretch
+
+RUN apt update
+RUN apt -y upgrade
+
+RUN apt install -y unzip \
+                   libusb-0.1-4 libreadline6 \
+                   sudo gcc
+
+WORKDIR /scratch/
+COPY chdkptp-r795-raspbian-gui.zip ./
+COPY docker-entrypoint.sh ./
+COPY create_user.c ./
+COPY sudoers_rule /etc/sudoers.d/
+
+# Setup entrypoint stuff - this makes sure a user as specified by -u always exists.
+#
+RUN chmod +x docker-entrypoint.sh && \
+    gcc create_user.c -o create_user && \
+    chown root:root create_user && \
+    chmod +x ./create_user && \
+    chmod u+s ./create_user && \
+    unzip chdkptp-r795-raspbian-gui.zip && \
+    chmod 0440 /etc/sudoers.d/sudoers_rule
+
+WORKDIR /scratch/chdkptp-r795/
+
+ENTRYPOINT ["/scratch/docker-entrypoint.sh"]
+CMD ["./chdkptp.sh"]
